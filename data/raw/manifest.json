@@ -1,0 +1,39 @@
+{
+  "uci_sms_spam": {
+    "url": "https://archive.ics.uci.edu/static/public/228/sms+spam+collection.zip",
+    "file": "data/raw/SMSSpamCollection",
+    "downloaded_at": "2026-10-04T18:48:22+00:00",
+    "sha256": "7d039a24a6083ed9ef0f806ebad56bbb976e3aeb8de05669173bfdc4996c239d",
+    "bytes": 477907,
+    "role": "pre-drift",
+    "licence": "CC BY 4.0 (attribution required)",
+    "citation": "Almeida, T., & Hidalgo, J. M. G. (2011). SMS Spam Collection [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5CC84",
+    "rows": 5574,
+    "label_counts": {
+      "ham": 4827,
+      "spam": 747
+    },
+    "encoding": "utf-8"
+  },
+  "super_sms": {
+    "url": "https://raw.githubusercontent.com/smspamresearch/spstudy/a0889f36fb59e23a7f853a6932485d93d18b8afc/Data/super_sms_dataset.csv",
+    "file": "data/raw/super_sms_dataset.csv",
+    "downloaded_at": "2026-10-04T18:48:22+00:00",
+    "sha256": "ba825b468b59fb229cc56c15a6c2d14d593a88051d54ea2f402166bf2ab894d3",
+    "bytes": 6728482,
+    "role": "post-drift",
+    "licence": "No licence file; README requests citation of Salman et al. (2024). Academic, non-commercial use only; do not redistribute.",
+    "citation": "Salman, M., Ikram, M., & Kaafar, M. A. (2024). Super SMS Dataset [Dataset]. GitHub. https://github.com/smspamresearch/spstudy",
+    "rows": 67010,
+    "label_counts": {
+      "1": 26178,
+      "0": 40830,
+      "missing": 2
+    },
+    "columns": [
+      "SMSes",
+      "Labels"
+    ],
+    "encoding": "mixed; read as latin-1"
+  }
+}

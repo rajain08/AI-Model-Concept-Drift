@@ -1,0 +1,49 @@
+# Draft only for our team clarity. Super SMS has no timestamps, so "time" below 
+# is a seeded row order, not real chronology. Any drift measured here is dataset 
+# shift (UCI -> Super SMS), not shift observed over calendar time.
+seed: 29822
+unit: message
+preprocessing:
+  mask_uci: false            # must equal "mask_uci" in cleaning_report.json
+ordering:
+  timestamp_available: false
+  source: seeded_shuffle     # file order may carry hidden structure (e.g. sorted by label) that would fake a drift pattern
+                  
+stream:
+  chunk_size: null           # TODO(team): messages per stream step; not decided yet
+datasets:
+  pre_drift:
+    name: uci_sms_spam
+    path: data/processed/uci_messages.csv
+    role: reference
+    windows:
+      - name: pre_drift_reference
+        split: train
+        max_messages: null   # null = whole split
+      - name: pre_drift_validation
+        split: val
+        max_messages: null
+      - name: pre_drift_evaluation   # lets you measure forgetting after adapting
+        split: test
+        max_messages: null
+  post_drift:
+    name: super_sms
+    path: data/processed/super_messages.csv
+    role: drift_stream
+    windows:
+      - name: post_drift_calibration
+        split: train
+        max_messages: null   # expected 7000 (70% of 10,000)
+      - name: post_drift_validation
+        split: val
+        max_messages: null   # expected 1500
+      - name: post_drift_evaluation
+        split: test
+        max_messages: null   # expected 1500
+evaluation:
+  holdout_split: test
+  report: data/processed/cleaning_report.json
+  require:                                # stream must refuse to run unless all hold 
+    leakage_passed: true
+    leakage_fully_checked: true           # replay AND RAG ID files were actually checked
+    mask_uci_matches_preprocessing: true  # must equal preprocessing.mask_uci above

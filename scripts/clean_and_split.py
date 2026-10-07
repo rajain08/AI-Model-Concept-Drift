@@ -23,7 +23,8 @@ from ftfy import fix_encoding
 DEFAULT_SEED = 29822
 HUR_UCI_ROWS = 5572
 SUPER_PER_LABEL = 5_000
-SPLIT_FRACTIONS = {"train": 0.70, "val": 0.15, "test": 0.15}
+STREAM_WINDOW_SIZE = 2_000
+SPLIT_FRACTIONS = {"train": 0.60, "val": 0.20, "test": 0.20}
 EXPECTED_SUPER_DROPS = {"missing_label": 2, "empty_message": 1}
 SUPER_LABELS = {"0": "ham", "1": "spam"}
 VALID_LABELS = {"spam", "ham"}
@@ -44,8 +45,7 @@ REMOVED_FIELDS = [
 ]
 
 
-# ---------------------------------------------------------------- reading ----
-
+# reading helpers
 def decode_lines(raw: bytes) -> tuple[list[str], dict]:
     """Decode each line as UTF-8, falling back to cp1252.
 
@@ -135,8 +135,7 @@ def read_super(path: Path) -> tuple[list[dict], dict]:
     return rows, stats
 
 
-# --------------------------------------------------------------- cleaning ----
-
+# cleaning helpers
 def dedup_key(text: str) -> str:
     return " ".join(text.casefold().split())
 
@@ -215,8 +214,7 @@ def uci_ham_candidates(rows: list[dict]) -> list[dict]:
     return candidates
 
 
-# ------------------------------------------------------ sampling/splitting ----
-
+# sampling/splitting
 def balanced_sample(rows: list[dict], seed: int, per_label: int) -> list[dict]:
     rng = random.Random(seed)
     sampled = []
@@ -248,8 +246,7 @@ def stratified_split(rows: list[dict], seed: int) -> dict[str, list[dict]]:
     return result
 
 
-# ---------------------------------------------------------------- leakage ----
-
+# leakage check: message_id and dedup_key(text) must be disjoint across splits, and test must be disjoint from replay/rag IDs
 def leakage_check(split_rows, replay_ids: set[str] | None, rag_ids: set[str] | None) -> dict:
     ids = {name: {r["message_id"] for r in rows} for name, rows in split_rows.items()}
     keys = {name: {dedup_key(r["text"]) for r in rows} for name, rows in split_rows.items()}
@@ -273,8 +270,7 @@ def read_id_file(path: Path | None) -> set[str] | None:
     return set(path.read_text(encoding="utf-8").split()) if path else None
 
 
-# ----------------------------------------------------------------- output ----
-
+# output writing helpers
 def write_csv(path: Path, rows: list[dict], fields: list[str] = CSV_FIELDS) -> None:
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
@@ -289,6 +285,31 @@ def write_split_ids(directory: Path, split_rows: dict[str, list[dict]]) -> dict[
         path.write_text("".join(f"{row['message_id']}\n" for row in rows), encoding="utf-8")
         hashes[split] = hashlib.sha256(path.read_bytes()).hexdigest()
     return hashes
+
+
+def write_ordered_stream(output_dir: Path, rows: list[dict], window_size: int) -> dict:
+    """Write the sampled Super SMS rows in original source-row order.
+
+    This is a source-order proxy, not verified chronology, because the source
+    dataset has no timestamps.
+    """
+    ordered = sorted(rows, key=lambda row: row["source_row"])
+    stream_fields = CSV_FIELDS + ["stream_position", "stream_window"]
+    stream_rows = []
+    window_ids = {}
+    for position, row in enumerate(ordered):
+        window = position // window_size + 1
+        stream_row = {**row, "stream_position": position + 1, "stream_window": window}
+        stream_rows.append(stream_row)
+        window_ids.setdefault(window, []).append(row["message_id"])
+    write_csv(output_dir / "super_stream.csv", stream_rows, stream_fields)
+    windows_dir = output_dir / "splits" / "super_stream"
+    windows_dir.mkdir(exist_ok=True)
+    for window, ids in window_ids.items():
+        (windows_dir / f"window_{window:02d}.txt").write_text(
+            "".join(f"{message_id}\n" for message_id in ids), encoding="utf-8"
+        )
+    return {"window_size": window_size, "windows": {str(k): len(v) for k, v in window_ids.items()}}
 
 
 def changed_counts(rows: list[dict]) -> dict:
@@ -306,20 +327,23 @@ def main() -> int:
     parser.add_argument("--rag-ids", type=Path, help="file of RAG message IDs to check against test")
     parser.add_argument("--require-full-leakage-check", action="store_true", help="fail unless both --replay-ids and --rag-ids are given")
     parser.add_argument("--allow-unexpected-drops", action="store_true", help="do not fail if Super SMS drops differ from 2 missing labels + 1 empty message")
+    parser.add_argument("--stream-window-size", type=int, default=STREAM_WINDOW_SIZE, help="rows per source-order Super SMS window")
     args = parser.parse_args()
+    if args.stream_window_size < 1:
+        parser.error("--stream-window-size must be positive")
     if args.require_full_leakage_check and not (args.replay_ids and args.rag_ids):
         parser.error("--require-full-leakage-check needs both --replay-ids and --rag-ids")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     splits_dir = args.output_dir / "splits"
     splits_dir.mkdir(exist_ok=True)
 
-    # 1-2. Read, fix encoding, keep originals, count changes.
+    # Read, fix encoding, keep originals, count changes
     uci_all, uci_read = read_uci(args.raw_dir / "SMSSpamCollection", args.mask_uci)
     super_all, super_read = read_super(args.raw_dir / "super_sms_dataset.csv")
     raw_rows = {"uci_sms_spam": len(uci_all), "super_sms": len(super_all)}
     changed = {"uci_sms_spam": changed_counts(uci_all), "super_sms": changed_counts(super_all)}
 
-    # 4. Diagnostic for the UCI -> Hur gap (before any exclusion).
+    # Diagnostic for the UCI -> Hur gap (before any exclusion)
     candidates = uci_ham_candidates(uci_all)
     write_csv(args.output_dir / "uci_ham_candidates.csv", candidates,
               ["message_id", "source_row", "reasons", "duplicate_of", "text"])
@@ -331,7 +355,7 @@ def main() -> int:
         raise ValueError(f"--uci-exclude-file has unknown IDs: {sorted(unknown_excluded)[:10]}")
     uci_all = [r for r in uci_all if r["message_id"] not in excluded]
 
-    # 3. Drop missing labels / empty messages (both datasets).
+    # Drop missing labels / empty messages (both datasets)
     uci_rows, uci_invalid = drop_invalid(uci_all)
     super_rows, super_invalid = drop_invalid(super_all)
     super_drop_counts = count_reasons(super_invalid)
@@ -341,18 +365,18 @@ def main() -> int:
                            "inspect the raw file or pass --allow-unexpected-drops")
     uci_before_dedup = len(uci_rows)
 
-    # 5. Dedup within and across datasets (UCI first, so Super loses cross-dataset ties).
+    # Dedup within and across datasets (UCI first, so Super loses cross-dataset ties)
     seen: dict[str, dict] = {}
     uci_rows, uci_dups = deduplicate(uci_rows, seen)
     super_rows, super_dups = deduplicate(super_rows, seen)
     removed = uci_invalid + super_invalid + uci_dups + super_dups
 
-    # 6-7. Sample and split.
+    # Sample and split
     sampled_super = balanced_sample(super_rows, args.seed, SUPER_PER_LABEL)
     uci_splits = stratified_split(uci_rows, args.seed)
     super_splits = stratified_split(sampled_super, args.seed)
 
-    # 8. Leakage check BEFORE anything is written.
+    # Leakage check BEFORE anything is written
     replay_ids, rag_ids = read_id_file(args.replay_ids), read_id_file(args.rag_ids)
     known_ids = {r["message_id"] for r in uci_rows} | {r["message_id"] for r in super_rows}
     cross_overlap = len({dedup_key(r["text"]) for r in uci_rows} & {dedup_key(r["text"]) for r in sampled_super})
@@ -370,11 +394,14 @@ def main() -> int:
     if not leakage["fully_checked"]:
         print("WARNING: replay and/or RAG ID files not supplied; those leakage checks were skipped.")
 
-    # Write outputs.
+    # Write outputs
     write_csv(args.output_dir / "uci_messages.csv", uci_rows)
     write_csv(args.output_dir / "super_cleaned_full.csv", super_rows)  # population before sampling, for EDA
     write_csv(args.output_dir / "super_messages.csv", sampled_super)
     write_csv(args.output_dir / "removed_rows.csv", removed, REMOVED_FIELDS)
+    # Keep the full cleaned population for source-order drift analysis, the
+    # balanced sample remains the controlled baseline evaluation set
+    ordered_stream = write_ordered_stream(args.output_dir, super_rows, args.stream_window_size)
     split_hashes = {}
     for dataset, split_rows in (("uci_sms_spam", uci_splits), ("super_sms", super_splits)):
         dataset_dir = splits_dir / dataset
@@ -417,6 +444,7 @@ def main() -> int:
             dataset: {split: len(rows) for split, rows in split_rows.items()}
             for dataset, split_rows in (("uci_sms_spam", uci_splits), ("super_sms", super_splits))
         },
+        "ordered_stream": ordered_stream,
         "split_file_sha256": split_hashes,
         "leakage": leakage,
     }

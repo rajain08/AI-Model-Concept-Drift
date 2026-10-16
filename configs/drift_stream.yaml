@@ -1,16 +1,27 @@
-# Draft only for our team clarity. Super SMS has no timestamps, so "time" below 
-# is a seeded row order, not real chronology. Any drift measured here is dataset 
+# Draft only for our team clarity. Super SMS has no timestamps, so "time" below
+# is a seeded row order, not real chronology. Any drift measured here is dataset
 # shift (UCI -> Super SMS), not shift observed over calendar time.
 seed: 29822
 unit: message
 preprocessing:
-  mask_uci: false            # must equal "mask_uci" in cleaning_report.json
+  mask_uci: false # must equal "mask_uci" in cleaning_report.json
 ordering:
   timestamp_available: false
-  source: seeded_shuffle     # file order may carry hidden structure (e.g. sorted by label) that would fake a drift pattern
-                  
-stream:
-  chunk_size: null           # TODO(team): messages per stream step; not decided yet
+  source: seeded_shuffle # file order may carry hidden structure (e.g. sorted by label) that would fake a drift pattern
+
+stream: # read by scripts/build_stream.py
+  window_size: 200 # messages per window
+  spam_ratio: 0.20 # same spam share in every window, so only message content drifts
+  source_split: train # only training messages are streamed; val and test stay held out
+  schedule: # share of post-drift (Super SMS) messages per window, in order
+    - { windows: 5, post_drift_fraction: 0.00 } # no drift: used to measure false alarms
+    - { windows: 1, post_drift_fraction: 0.10 } # drift starts here (window 6)
+    - { windows: 1, post_drift_fraction: 0.25 }
+    - { windows: 1, post_drift_fraction: 0.50 }
+    - { windows: 1, post_drift_fraction: 0.75 }
+    - { windows: 5, post_drift_fraction: 1.00 } # fully drifted: used to measure recovery
+  # Budget: UCI train has only ~385 spam. This schedule uses 296 of them. More pre-drift
+  # windows or a higher spam_ratio may run out; build_stream.py fails with a clear message.
 datasets:
   pre_drift:
     name: uci_sms_spam
@@ -19,11 +30,11 @@ datasets:
     windows:
       - name: pre_drift_reference
         split: train
-        max_messages: null   # null = whole split
+        max_messages: null # null = whole split
       - name: pre_drift_validation
         split: val
         max_messages: null
-      - name: pre_drift_evaluation   # lets you measure forgetting after adapting
+      - name: pre_drift_evaluation # held out: final grading only (forgetting), never streamed
         split: test
         max_messages: null
   post_drift:
@@ -33,17 +44,17 @@ datasets:
     windows:
       - name: post_drift_calibration
         split: train
-        max_messages: null   # expected 7000 (70% of 10,000)
+        max_messages: null # expected 6000 (60% of 10,000)
       - name: post_drift_validation
         split: val
-        max_messages: null   # expected 1500
-      - name: post_drift_evaluation
+        max_messages: null # expected 2000
+      - name: post_drift_evaluation # held out: final grading only, never streamed
         split: test
-        max_messages: null   # expected 1500
+        max_messages: null # expected 2000
 evaluation:
   holdout_split: test
   report: data/processed/cleaning_report.json
-  require:                                # stream must refuse to run unless all hold 
+  require: # stream must refuse to run unless all hold
     leakage_passed: true
-    leakage_fully_checked: true           # replay AND RAG ID files were actually checked
-    mask_uci_matches_preprocessing: true  # must equal preprocessing.mask_uci above
+    leakage_fully_checked: true # replay AND RAG ID files were actually checked
+    mask_uci_matches_preprocessing: true # must equal preprocessing.mask_uci above

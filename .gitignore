@@ -4,3 +4,4 @@ __pycache__/
 data/raw/*
 !data/raw/manifest.json
 data/processed/
+.DS_Store

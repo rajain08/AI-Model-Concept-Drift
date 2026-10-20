@@ -1,0 +1,49 @@
+{
+  "model": "llama3.2:3b",
+  "seed": 29822,
+  "runtime": "Ollama",
+  "prompt_examples": 15,
+  "prompt_example_ids": [
+    "uci-000043",
+    "uci-000185",
+    "uci-000596",
+    "uci-001092",
+    "uci-001263",
+    "uci-001700",
+    "uci-002805",
+    "uci-002822",
+    "uci-003231",
+    "uci-003808",
+    "uci-003997",
+    "uci-004372",
+    "uci-004648",
+    "uci-004764",
+    "uci-005450"
+  ],
+  "overlap_excluded": 12,
+  "overlap_ids": [
+    "uci-001263",
+    "uci-000043",
+    "uci-001092",
+    "uci-001700",
+    "uci-003231",
+    "uci-002822",
+    "uci-002805",
+    "uci-004648",
+    "uci-004372",
+    "uci-000596",
+    "uci-003808",
+    "uci-003997"
+  ],
+  "messages_evaluated": 2788,
+  "test_limit": 0,
+  "windows_evaluated": 14,
+  "runtime_seconds": 363.16,
+  "notes": [
+    "Training-stream diagnostic, not held-out evaluation.",
+    "No adaptation or drift detection performed.",
+    "Prompt-example overlaps excluded from scoring.",
+    "Message order represents simulated drift, not real time.",
+    "Invalid responses count as incorrect in accuracy."
+  ]
+}

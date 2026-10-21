@@ -1,0 +1,55 @@
+{
+  "model": "llama3.2:3b",
+  "runtime": "Ollama",
+  "seed": 29822,
+  "shots": 15,
+  "shot_message_ids": [
+    "uci-004648",
+    "uci-004372",
+    "uci-000596",
+    "uci-003808",
+    "uci-005450",
+    "uci-002805",
+    "uci-003231",
+    "uci-001263",
+    "uci-001092",
+    "uci-000043",
+    "uci-004764",
+    "uci-003997",
+    "uci-001700",
+    "uci-000185",
+    "uci-002822"
+  ],
+  "temperature": 0,
+  "num_predict": 128,
+  "test_limit": 0,
+  "note": "Local paper-inspired baseline. Not an exact replication until settings and datasets are fully matched.",
+  "results": {
+    "uci": {
+      "total": 1031,
+      "invalid": 2,
+      "accuracy": 0.7546071774975752,
+      "precision": 0.33423180592991913,
+      "recall": 0.96875,
+      "f1": 0.4969939879759519,
+      "tn": 654,
+      "fp": 247,
+      "fn": 4,
+      "tp": 124,
+      "runtime_seconds": 125.58
+    },
+    "super_sms": {
+      "total": 2000,
+      "invalid": 0,
+      "accuracy": 0.8625,
+      "precision": 0.7968877968877969,
+      "recall": 0.973,
+      "f1": 0.8761819000450247,
+      "tn": 752,
+      "fp": 248,
+      "fn": 27,
+      "tp": 973,
+      "runtime_seconds": 375.54
+    }
+  }
+}

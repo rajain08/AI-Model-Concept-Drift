@@ -1,0 +1,53 @@
+{
+  "adwin": {
+    "detector": "ADWIN (Error Stream)",
+    "false_alarms_per_1000": 0,
+    "detection_delay_messages": null,
+    "detection_delay_windows": null,
+    "first_alert_window": null,
+    "first_alert_position": null,
+    "total_alerts": 0
+  },
+  "ks": {
+    "detector": "Statistical KS Test",
+    "false_alarms_per_1000": 0,
+    "detection_delay_messages": 400,
+    "detection_delay_windows": 2,
+    "first_alert_window": 8,
+    "first_alert_position": 1401,
+    "total_alerts": 7
+  },
+  "psi": {
+    "detector": "Statistical PSI",
+    "false_alarms_per_1000": 0,
+    "detection_delay_messages": 600,
+    "detection_delay_windows": 3,
+    "first_alert_window": 9,
+    "first_alert_position": 1601,
+    "total_alerts": 6
+  },
+  "mmd": {
+    "detector": "Embedding MMD",
+    "false_alarms_per_1000": 0,
+    "detection_delay_messages": 200,
+    "detection_delay_windows": 1,
+    "first_alert_window": 7,
+    "first_alert_position": 1201,
+    "total_alerts": 8
+  },
+  "calibrated_thresholds": {
+    "ks_threshold": 0.0886,
+    "psi_threshold": 0.1,
+    "mmd_threshold": 0.0376,
+    "adwin_delta": 0.01
+  },
+  "config": {
+    "pre_drift_windows": 5,
+    "pre_drift_messages": 1000,
+    "drift_onset_window": 6,
+    "drift_onset_message": 1001,
+    "total_windows": 14,
+    "total_messages": 2800
+  },
+  "runtime_seconds": 0.81
+}

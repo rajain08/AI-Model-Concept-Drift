@@ -1,7 +1,14 @@
 .venv/
+venv/
+env/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 data/raw/*
 !data/raw/manifest.json
 data/processed/
+results/*_smoke/
+*predictions.csv
 .DS_Store
+.vscode/
+.idea/

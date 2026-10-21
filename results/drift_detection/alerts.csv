@@ -1,0 +1,22 @@
+detector,stream_position,window,phase,post_drift_fraction,metric_value,threshold,is_false_alarm
+Embedding MMD (RBF),1201,7,transition,0.25,0.0624,0.0376,False
+Statistical KS Test,1401,8,transition,0.5,0.121,0.0886,False
+Embedding MMD (RBF),1401,8,transition,0.5,0.0585,0.0376,False
+Statistical KS Test,1601,9,transition,0.75,0.145,0.0886,False
+Statistical PSI,1601,9,transition,0.75,0.1138,0.1,False
+Embedding MMD (RBF),1601,9,transition,0.75,0.0645,0.0376,False
+Statistical KS Test,1801,10,post_drift,1.0,0.202,0.0886,False
+Statistical PSI,1801,10,post_drift,1.0,0.2182,0.1,False
+Embedding MMD (RBF),1801,10,post_drift,1.0,0.0879,0.0376,False
+Statistical KS Test,2001,11,post_drift,1.0,0.195,0.0886,False
+Statistical PSI,2001,11,post_drift,1.0,0.2421,0.1,False
+Embedding MMD (RBF),2001,11,post_drift,1.0,0.0676,0.0376,False
+Statistical KS Test,2201,12,post_drift,1.0,0.157,0.0886,False
+Statistical PSI,2201,12,post_drift,1.0,0.166,0.1,False
+Embedding MMD (RBF),2201,12,post_drift,1.0,0.0868,0.0376,False
+Statistical KS Test,2401,13,post_drift,1.0,0.206,0.0886,False
+Statistical PSI,2401,13,post_drift,1.0,0.2184,0.1,False
+Embedding MMD (RBF),2401,13,post_drift,1.0,0.0771,0.0376,False
+Statistical KS Test,2601,14,post_drift,1.0,0.187,0.0886,False
+Statistical PSI,2601,14,post_drift,1.0,0.1494,0.1,False
+Embedding MMD (RBF),2601,14,post_drift,1.0,0.087,0.0376,False

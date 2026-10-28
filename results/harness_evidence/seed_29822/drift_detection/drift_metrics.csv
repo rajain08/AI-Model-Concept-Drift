@@ -1,0 +1,15 @@
+window,phase,post_drift_fraction,adwin_mean_error,ks_statistic,ks_pvalue,psi,mmd,alert_adwin,alert_ks,alert_psi,alert_mmd
+1,pre_drift,0.0,0.605,0.077,0.267,0.0416,0.0,False,False,False,False
+2,pre_drift,0.0,0.605,0.069,0.394,0.0324,0.0,False,False,False,False
+3,pre_drift,0.0,0.6083,0.043,0.909,0.0127,0.0,False,False,False,False
+4,pre_drift,0.0,0.61,0.073,0.327,0.0266,0.0,False,False,False,False
+5,pre_drift,0.0,0.608,0.056,0.659,0.0253,0.0,False,False,False,False
+6,transition,0.1,0.6067,0.062,0.53,0.0399,0.0278,False,False,False,False
+7,transition,0.25,0.6057,0.061,0.551,0.0354,0.0558,False,False,False,True
+8,transition,0.5,0.6062,0.121,0.0143,0.0768,0.0548,False,True,False,True
+9,transition,0.75,0.6072,0.145,0.00166,0.1138,0.0602,False,True,True,True
+10,post_drift,1.0,0.603,0.202,2.07e-06,0.2182,0.0908,False,True,True,True
+11,post_drift,1.0,0.5982,0.195,5.32e-06,0.2421,0.0705,False,True,True,True
+12,post_drift,1.0,0.5938,0.157,0.00049,0.166,0.0881,False,True,True,True
+13,post_drift,1.0,0.5935,0.206,1.19e-06,0.2184,0.0744,False,True,True,True
+14,post_drift,1.0,0.5904,0.187,1.5e-05,0.1494,0.0852,False,True,True,True

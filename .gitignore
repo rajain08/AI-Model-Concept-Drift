@@ -9,6 +9,8 @@ data/raw/*
 data/processed/
 results/*_smoke/
 *predictions.csv
+*.safetensors
+results/**/adapted_model/tokenizer.json
 .DS_Store
 .vscode/
 .idea/

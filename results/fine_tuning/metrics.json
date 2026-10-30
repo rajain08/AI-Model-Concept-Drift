@@ -1,0 +1,110 @@
+{
+  "phase": "Phase 5: Drift-Triggered Full Fine-Tuning",
+  "seed": 29822,
+  "model_name": "unsloth/Llama-3.2-3B",
+  "git_commit": "4fc7948c32faa6c61f8ca584da4ce28645d242f9",
+  "stream_sha256": "e1e826a9b26a1f85630c1796294dc795a8e05711097ffe6eea4ac5768955cd16",
+  "drift_trigger": {
+    "trigger_source": "calibrated_detector_fallback",
+    "detector": "Embedding MMD (RBF)",
+    "trigger_window": 7,
+    "trigger_stream_position": 1201,
+    "detection_delay_messages": 200,
+    "detection_delay_windows": 1,
+    "adwin_delta_tested": 0.01,
+    "adwin_triggered": false,
+    "fallback_used": true,
+    "fallback_reason": "ADWIN had 0 alerts at delta=0.01 because unadapted error rate did not increase after drift onset; triggered via earliest calibrated drift alert (Embedding MMD (RBF) at window 7, pos 1201)."
+  },
+  "training_data": {
+    "train_source": "stream_post_trigger",
+    "train_messages": 1600,
+    "train_spam": 320,
+    "train_ham": 1280,
+    "train_post_drift_messages": 1300,
+    "train_pre_drift_messages": 300,
+    "val_messages": 200,
+    "zero_test_leakage_verified": true
+  },
+  "hyperparameters": {
+    "optimizer": "lomo",
+    "epochs": 2,
+    "batch_size": 1,
+    "eval_batch_size": 2,
+    "grad_accum_steps": 4,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_grad_norm": 1.0,
+    "max_length": 128,
+    "limit": 0
+  },
+  "retention_and_adaptation": {
+    "post_drift_f1": 0.73795,
+    "pre_drift_f1": 0.438438,
+    "baseline_post_drift_f1": 0.874832,
+    "baseline_pre_drift_f1": 0.492063,
+    "post_drift_f1_delta": -0.136882,
+    "pre_drift_f1_delta": -0.053625,
+    "pre_drift_f1_retention_ratio": 0.891019,
+    "pre_drift_f1_retention_percent": 89.1,
+    "baseline_post_drift_accuracy": 0.8605,
+    "baseline_pre_drift_accuracy": 0.749758,
+    "calibrated_decision_threshold": 0.006745
+  },
+  "evaluation": {
+    "post_drift_super_sms_test": {
+      "total": 2000,
+      "invalid": 0,
+      "accuracy": 0.7635,
+      "precision": 0.827329,
+      "recall": 0.666,
+      "f1": 0.73795,
+      "tn": 861,
+      "fp": 139,
+      "fn": 334,
+      "tp": 666,
+      "roc_auc": 0.837839,
+      "calibrated_threshold": 0.006745
+    },
+    "pre_drift_uci_test": {
+      "total": 1031,
+      "invalid": 0,
+      "accuracy": 0.818623,
+      "precision": 0.356098,
+      "recall": 0.570312,
+      "f1": 0.438438,
+      "tn": 771,
+      "fp": 132,
+      "fn": 55,
+      "tp": 73,
+      "roc_auc": 0.812388,
+      "calibrated_threshold": 0.006745
+    }
+  },
+  "compute": {
+    "device_type": "mps",
+    "torch_version": "2.15.0",
+    "gpu_name": "Apple Silicon MPS (Metal Performance Shaders)",
+    "optimizer": "lomo",
+    "total_parameters": 3212755968,
+    "trainable_parameters": 3212755968,
+    "trainable_fraction": 1.0,
+    "dtype": "bfloat16",
+    "training_compute_seconds": 6166.95,
+    "training_wall_seconds": 6267.37,
+    "uci_test_eval_seconds": 70.81,
+    "super_sms_test_eval_seconds": 146.42,
+    "total_gpu_compute_seconds": 6384.18,
+    "total_gpu_compute_hours": 1.773384,
+    "peak_memory_mb": 6921.69,
+    "uci_test_loss": 0.599198,
+    "super_sms_test_loss": 2.154277
+  },
+  "artifacts": {
+    "adapted_model_dir": "results/fine_tuning/adapted_model",
+    "training_logs_csv": "results/fine_tuning/training_logs.csv",
+    "uci_test_predictions_csv": "results/fine_tuning/uci_test_predictions.csv",
+    "super_sms_test_predictions_csv": "results/fine_tuning/super_sms_test_predictions.csv"
+  }
+}

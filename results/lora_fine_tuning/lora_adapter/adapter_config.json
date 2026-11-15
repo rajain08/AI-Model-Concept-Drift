@@ -1,0 +1,22 @@
+{
+  "peft_type": "LORA",
+  "task_type": "SEQ_CLS",
+  "lora_r": 16,
+  "lora_alpha": 32.0,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
+  ],
+  "adapted_linear_layers": 196,
+  "classification_head_params": 6144,
+  "total_parameters": 3237069824,
+  "trainable_parameters": 24320000,
+  "frozen_parameters": 3212749824,
+  "trainable_percentage": 0.7513
+}

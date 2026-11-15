@@ -349,7 +349,7 @@ def build_training_and_val_sets(
 
 
 def calculate_classification_metrics(records: list[dict]) -> dict:
-    from sklearn.metrics import roc_auc_score
+    from sklearn.metrics import auc, average_precision_score, precision_recall_curve, roc_auc_score
 
     tp = tn = fp = fn = invalid = 0
     y_true = []
@@ -378,10 +378,17 @@ def calculate_classification_metrics(records: list[dict]) -> dict:
     precision = tp / (tp + fp) if (tp + fp) else 0.0
     recall = tp / (tp + fn) if (tp + fn) else 0.0
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
+    fpr = fp / (fp + tn) if (fp + tn) else 0.0
+    compliance = 1.0 - (invalid / total) if total else 1.0
 
     roc_auc = None
+    pr_auc = None
+    avg_prec = None
     if len(set(y_true)) == 2 and len(y_prob) == len(y_true):
         roc_auc = round(float(roc_auc_score(y_true, y_prob)), 6)
+        prec_curve, rec_curve, _ = precision_recall_curve(y_true, y_prob)
+        pr_auc = round(float(auc(rec_curve, prec_curve)), 6)
+        avg_prec = round(float(average_precision_score(y_true, y_prob)), 6)
 
     result = {
         "total": total,
@@ -390,6 +397,8 @@ def calculate_classification_metrics(records: list[dict]) -> dict:
         "precision": round(precision, 6),
         "recall": round(recall, 6),
         "f1": round(f1, 6),
+        "false_positive_rate": round(fpr, 6),
+        "output_format_compliance_rate": round(compliance, 6),
         "tn": tn,
         "fp": fp,
         "fn": fn,
@@ -397,6 +406,9 @@ def calculate_classification_metrics(records: list[dict]) -> dict:
     }
     if roc_auc is not None:
         result["roc_auc"] = roc_auc
+    if pr_auc is not None:
+        result["pr_auc"] = pr_auc
+        result["average_precision"] = avg_prec
     return result
 
 

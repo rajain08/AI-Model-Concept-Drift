@@ -10,7 +10,9 @@ data/processed/
 results/*_smoke/
 *predictions.csv
 *.safetensors
+*.pt
 results/**/adapted_model/tokenizer.json
+results/**/lora_adapter/tokenizer.json
 .DS_Store
 .vscode/
 .idea/

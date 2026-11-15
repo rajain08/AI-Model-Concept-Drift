@@ -50,7 +50,8 @@
     "pre_drift_f1_retention_percent": 89.1,
     "baseline_post_drift_accuracy": 0.8605,
     "baseline_pre_drift_accuracy": 0.749758,
-    "calibrated_decision_threshold": 0.006745
+    "calibrated_decision_threshold": 0.006745,
+    "forgetting_f1_drop": 0.053625
   },
   "evaluation": {
     "post_drift_super_sms_test": {
@@ -65,7 +66,12 @@
       "fn": 334,
       "tp": 666,
       "roc_auc": 0.837839,
-      "calibrated_threshold": 0.006745
+      "calibrated_threshold": 0.006745,
+      "false_positive_rate": 0.139,
+      "pr_auc": 0.849323,
+      "average_precision": 0.849112,
+      "output_format_compliance_rate": 1.0,
+      "inference_latency_ms_per_message": 73.21
     },
     "pre_drift_uci_test": {
       "total": 1031,
@@ -79,7 +85,12 @@
       "fn": 55,
       "tp": 73,
       "roc_auc": 0.812388,
-      "calibrated_threshold": 0.006745
+      "calibrated_threshold": 0.006745,
+      "false_positive_rate": 0.146179,
+      "pr_auc": 0.390482,
+      "average_precision": 0.394878,
+      "output_format_compliance_rate": 1.0,
+      "inference_latency_ms_per_message": 68.681
     }
   },
   "compute": {
@@ -99,7 +110,8 @@
     "total_gpu_compute_hours": 1.773384,
     "peak_memory_mb": 6921.69,
     "uci_test_loss": 0.599198,
-    "super_sms_test_loss": 2.154277
+    "super_sms_test_loss": 2.154277,
+    "model_checkpoint_size_mb": 6127.87
   },
   "artifacts": {
     "adapted_model_dir": "results/fine_tuning/adapted_model",

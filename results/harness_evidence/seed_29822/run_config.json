@@ -1,0 +1,99 @@
+{
+  "seed": 29822,
+  "model": "llama3.2:3b",
+  "prompt_examples": [
+    "uci-005240",
+    "uci-004822",
+    "uci-001128",
+    "uci-000882",
+    "uci-000171",
+    "uci-003632",
+    "uci-003015",
+    "uci-004830",
+    "uci-000416",
+    "uci-000020",
+    "uci-004208",
+    "uci-005252",
+    "uci-001264",
+    "uci-003481",
+    "uci-002643"
+  ],
+  "stream_sha256": "e1e826a9b26a1f85630c1796294dc795a8e05711097ffe6eea4ac5768955cd16",
+  "stream_manifest": {
+    "seed": 29822,
+    "config": "configs\\drift_stream.yaml",
+    "config_sha256": "a3224fc6428936ed6f1d21c8bd665f8e2334d2e852891dc427662a10c323cc3f",
+    "settings": {
+      "window_size": 200,
+      "spam_ratio": 0.2,
+      "source_split": "train",
+      "schedule": [
+        {
+          "windows": 5,
+          "post_drift_fraction": 0.0
+        },
+        {
+          "windows": 1,
+          "post_drift_fraction": 0.1
+        },
+        {
+          "windows": 1,
+          "post_drift_fraction": 0.25
+        },
+        {
+          "windows": 1,
+          "post_drift_fraction": 0.5
+        },
+        {
+          "windows": 1,
+          "post_drift_fraction": 0.75
+        },
+        {
+          "windows": 5,
+          "post_drift_fraction": 1.0
+        }
+      ]
+    },
+    "mask_uci": false,
+    "ordering": "seeded shuffle within each pool and window; no real timestamps",
+    "windows": 14,
+    "messages": 2800,
+    "drift_onset_window": 6,
+    "drift_onset_position": 1001,
+    "fully_post_drift_from_window": 10,
+    "budget": {
+      "post_drift_spam": {
+        "needed": 264,
+        "available": 3000
+      },
+      "post_drift_ham": {
+        "needed": 1056,
+        "available": 3000
+      },
+      "pre_drift_spam": {
+        "needed": 296,
+        "available": 385
+      },
+      "pre_drift_ham": {
+        "needed": 1184,
+        "available": 2711
+      }
+    },
+    "checks": {
+      "no_duplicate_messages": true,
+      "no_validation_or_test_messages": true,
+      "equal_spam_per_window": true,
+      "equal_window_size": true,
+      "starts_pre_drift_only": true
+    },
+    "source_split_sha256": {
+      "uci_sms_spam": "faecb9bd0be25a85d88c681d50ebbd193631f294c0aab63f5f8acb8a5c390baf",
+      "super_sms": "6eb6523a3a1591741e3b10b794eba03e64813a369b4496f31e1c6d9f86e8ed8a"
+    },
+    "stream_csv_sha256": "e1e826a9b26a1f85630c1796294dc795a8e05711097ffe6eea4ac5768955cd16"
+  },
+  "limit": 0,
+  "git_commit": "5de27c6e03849d58c063886029c73bf08ec85e0a",
+  "gpu_detected": "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "note": "Training-stream diagnostic, not held-out test accuracy. Few-shot examples excluded from the entire stream."
+}

@@ -1,0 +1,54 @@
+{
+  "seeds": [29822, 29823, 29824],
+  "processed_dir": "data/processed",
+  "stream_dir": "data/processed/stream",
+  "baseline_method": "baseline",
+  "primary_metric": "f1",
+  "requirements_source": "Reviewed concept drift benchmark specification",
+  "classification_metrics": ["f1", "accuracy", "precision", "recall", "false_positive_rate", "pr_auc"],
+  "historical_results": [
+    {
+      "method": "baseline", "kind": "baseline", "seed": 29822,
+      "git_ref": "8ac3bedfe207dfbe21fc76ba2afbf4c32e540aec",
+      "metrics_path": "results/baseline_full/metrics.json",
+      "prediction_paths": {"uci_test": "results/baseline_full/uci_predictions.csv", "super_sms_test": "results/baseline_full/super_sms_predictions.csv"}
+    },
+    {
+      "method": "drift_triggered_lora", "kind": "lora", "seed": 29822,
+      "git_ref": "8ac3bedfe207dfbe21fc76ba2afbf4c32e540aec",
+      "metrics_path": "results/lora_fine_tuning/metrics.json",
+      "prediction_paths": {"uci_test": "results/lora_fine_tuning/uci_test_predictions.csv", "super_sms_test": "results/lora_fine_tuning/super_sms_test_predictions.csv"}
+    }
+  ],
+  "detector_families": {
+    "adwin": ["adwin"],
+    "statistical": ["ks", "psi"],
+    "embedding": ["mmd"]
+  },
+  "detector_calibration_windows": 3,
+  "detector_bootstrap_samples": 100,
+  "methods": [
+    {
+      "name": "baseline",
+      "label": "15-shot Llama 3.2 3B",
+      "runs_dir": "results/benchmark_runs/baseline",
+      "reuse_runs": {"29822": {"stream": "D:/DATA298A_Harness/seed_29822"}}
+    },
+    {
+      "name": "drift_triggered_lora",
+      "label": "Drift-triggered LoRA",
+      "runs_dir": "results/benchmark_runs/drift_triggered_lora",
+      "populations": ["uci_test", "super_sms_test"],
+      "trainer": {
+        "source_ref": "8ac3bedfe207dfbe21fc76ba2afbf4c32e540aec",
+        "source_branch": "origin/main",
+        "path": "scripts/train_lora.py",
+        "dependencies": ["scripts/train_adapted.py"],
+        "status": "gpu_runs_completed_and_locally_validated",
+        "entry_point": "scripts/run_step7_lora.py",
+        "run_config": "configs/step7_lora.json",
+        "note": "Seeds 29822, 29823, and 29824 completed on NVIDIA RTX PRO 4500 Blackwell. Downloaded predictions, frozen plans, thresholds, source/code identity, and adapter hashes passed local validation. No additional GPU runs are scheduled."
+      }
+    }
+  ]
+}

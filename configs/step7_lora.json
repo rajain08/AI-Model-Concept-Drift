@@ -1,0 +1,34 @@
+{
+  "method": "drift_triggered_lora",
+  "trainer_source_ref": "8ac3bedfe207dfbe21fc76ba2afbf4c32e540aec",
+  "upstream_sha256": {
+    "train_lora.py": "083ebb2039a9822c04bdd5fab3d94f0c6f5ab3d2a45b0f06b9b61cf8f2ed850f",
+    "train_adapted.py": "6bd588399d3df62c40655c39a39282735300f25f2c371eed0c482ac8415ed8cf"
+  },
+  "model_name": "unsloth/Llama-3.2-3B",
+  "model_revision": "d4446454d87d51aa42e1fb174f25acc5f8762331",
+  "trigger_detector": "mmd",
+  "trigger_policy": "first_monitored_alert",
+  "training_policy": "offline_stream_strictly_after_alert",
+  "hyperparameters": {
+    "lora_r": 16,
+    "lora_alpha": 32.0,
+    "lora_dropout": 0.05,
+    "target_modules": "q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj",
+    "class_weighted_loss": true,
+    "epochs": 2,
+    "batch_size": 4,
+    "eval_batch_size": 4,
+    "grad_accum_steps": 4,
+    "learning_rate": 0.0002,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "max_grad_norm": 1.0,
+    "max_length": 128,
+    "log_every_steps": 20,
+    "bf16": true,
+    "fp16": false,
+    "gradient_checkpointing": true,
+    "val_limit": 200
+  }
+}

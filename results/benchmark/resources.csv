@@ -1,0 +1,16 @@
+method,seed,population,status,complete_model_seed,hardware,measurement_scope,inference_wall_seconds,training_wall_seconds,peak_memory_mb,accelerator_hours_measured,compute_cost,cost_currency,trainable_parameters,adapter_size_mb
+baseline,29822,stream,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,stream,6887.541399999996,0,,,,,0,
+baseline,29822,uci_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"uci_test,super_sms_test",2501.419868200006,0,,,,,0,
+baseline,29822,super_sms_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"uci_test,super_sms_test",4749.769430400002,0,,,,,0,
+baseline,29823,stream,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",6620.726741100021,0,,,,,0,
+baseline,29823,uci_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",2484.777513399982,0,,,,,0,
+baseline,29823,super_sms_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",4913.990706600012,0,,,,,0,
+baseline,29824,stream,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",6773.386426900006,0,,,,,0,
+baseline,29824,uci_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",2476.8339529000095,0,,,,,0,
+baseline,29824,super_sms_test,complete,True,NVIDIA GeForce RTX 3050 Laptop GPU,"stream,uci_test,super_sms_test",4797.3654108999635,0,,,,,0,
+drift_triggered_lora,29822,uci_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",13.68,107.85,6520.42,,,,24320000.0,46.507758140563965
+drift_triggered_lora,29822,super_sms_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",26.6,107.85,6520.42,,,,24320000.0,46.507758140563965
+drift_triggered_lora,29823,uci_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",12.69,103.77,6523.25,,,,24320000.0,46.507758140563965
+drift_triggered_lora,29823,super_sms_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",25.42,103.77,6523.25,,,,24320000.0,46.507758140563965
+drift_triggered_lora,29824,uci_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",13.41,105.01,6522.35,,,,24320000.0,46.507758140563965
+drift_triggered_lora,29824,super_sms_test,complete,True,NVIDIA RTX PRO 4500 Blackwell,"uci_test,super_sms_test",25.9,105.01,6522.35,,,,24320000.0,46.507758140563965

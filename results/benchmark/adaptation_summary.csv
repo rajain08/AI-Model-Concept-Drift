@@ -1,0 +1,7 @@
+method,metric,n,mean,std
+baseline,super_sms_f1,3,0.8186160827747825,0.09728958947396264
+baseline,super_sms_f1_change_pp,3,0.0,0.0
+baseline,uci_f1_retention_pct,3,100.0,0.0
+drift_triggered_lora,super_sms_f1,3,0.9853991204228101,0.0015950111716673083
+drift_triggered_lora,super_sms_f1_change_pp,3,16.678303764802756,9.882644160891143
+drift_triggered_lora,uci_f1_retention_pct,3,260.6718240247832,102.86862761843318

@@ -1,0 +1,36 @@
+method,population,hardware,cost_currency,metric,n,mean,std
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,training_wall_seconds,3,0,0.0
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,inference_wall_seconds,3,6760.551522666675,133.8695881295921
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,peak_memory_mb,0,,
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,accelerator_hours_measured,0,,
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,compute_cost,0,,
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,trainable_parameters,3,0,0.0
+baseline,stream,NVIDIA GeForce RTX 3050 Laptop GPU,,adapter_size_mb,0,,
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,training_wall_seconds,3,0,0.0
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,inference_wall_seconds,3,4820.375182633326,84.49404763417405
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,peak_memory_mb,0,,
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,accelerator_hours_measured,0,,
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,compute_cost,0,,
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,trainable_parameters,3,0,0.0
+baseline,super_sms_test,NVIDIA GeForce RTX 3050 Laptop GPU,,adapter_size_mb,0,,
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,training_wall_seconds,3,0,0.0
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,inference_wall_seconds,3,2487.6771114999992,12.546814720910938
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,peak_memory_mb,0,,
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,accelerator_hours_measured,0,,
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,compute_cost,0,,
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,trainable_parameters,3,0,0.0
+baseline,uci_test,NVIDIA GeForce RTX 3050 Laptop GPU,,adapter_size_mb,0,,
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,training_wall_seconds,3,105.54333333333334,2.0916341298930186
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,inference_wall_seconds,3,25.973333333333333,0.5934082349726312
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,peak_memory_mb,3,6522.006666666667,1.4459022558020105
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,accelerator_hours_measured,0,,
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,compute_cost,0,,
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,trainable_parameters,3,24320000.0,0.0
+drift_triggered_lora,super_sms_test,NVIDIA RTX PRO 4500 Blackwell,,adapter_size_mb,3,46.507758140563965,0.0
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,training_wall_seconds,3,105.54333333333334,2.0916341298930186
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,inference_wall_seconds,3,13.26,0.5117616632769596
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,peak_memory_mb,3,6522.006666666667,1.4459022558020105
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,accelerator_hours_measured,0,,
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,compute_cost,0,,
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,trainable_parameters,3,24320000.0,0.0
+drift_triggered_lora,uci_test,NVIDIA RTX PRO 4500 Blackwell,,adapter_size_mb,3,46.507758140563965,0.0

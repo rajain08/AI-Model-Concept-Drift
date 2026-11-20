@@ -1,0 +1,6 @@
+# Install a CUDA-enabled PyTorch build on the approved GPU host first.
+# CPU preflight needs only requirements.txt; it never imports torch/transformers.
+-r requirements.txt
+torch>=2.5,<3
+transformers>=4.56,<5
+accelerate>=1.0,<2

@@ -191,6 +191,7 @@ class EmbeddingMMDDetector:
     #Compute Maximum Mean Discrepancy (MMD) with an RBF kernel on dense text embeddings
 
     def __init__(self, n_components: int = 40, seed: int = SEED):
+        self.seed = seed
         self.vectorizer = TfidfVectorizer(max_features=1000, stop_words="english", ngram_range=(1, 2))
         self.svd = TruncatedSVD(n_components=n_components, random_state=seed)
         self.gamma = None
@@ -203,7 +204,7 @@ class EmbeddingMMDDetector:
         #Median heuristic for RBF bandwidth gamma
         #Sample pairwise distances
         n_sample = min(len(ref_embeds), 300)
-        rng = np.random.default_rng(SEED)
+        rng = np.random.default_rng(self.seed)
         sample = ref_embeds[rng.choice(len(ref_embeds), n_sample, replace=False)]
 
         dists_sq = np.sum((sample[:, None, :] - sample[None, :, :]) ** 2, axis=-1)
@@ -252,47 +253,13 @@ def load_stream(path: Path) -> list[dict]:
 
 
 def get_error_stream(stream: list[dict], predictions_path: Path, metrics_path: Path) -> list[int]:
-    #Retrieve or reconstruct binary error stream [0, 1] aligned with stream order
-    if predictions_path.exists():
-        print(f"Loading predictions from: {predictions_path}")
-        with predictions_path.open(encoding="utf-8", newline="") as f:
-            preds = list(csv.DictReader(f))
-        
-        pred_map = {r["message_id"]: r["prediction"] for r in preds}
-        error_stream = []
-        for r in stream:
-            msg_id = r["message_id"]
-            if msg_id in pred_map:
-                is_err = 1 if pred_map[msg_id].strip().lower() != r["label"].strip().lower() else 0
-            else:
-                is_err = 0
-            error_stream.append(is_err)
-        return error_stream
-
-    #If predictions.csv is missing, use window_metrics.csv to simulate the exact window error distribution
-    if metrics_path.exists():
-        print(f"Predictions file not found. Reconstructing error stream from baseline metrics: {metrics_path}")
-        with metrics_path.open(encoding="utf-8", newline="") as f:
-            metrics = list(csv.DictReader(f))
-        
-        window_err_map = {}
-        for m in metrics:
-            w = int(m["window"])
-            acc = float(m["accuracy"])
-            window_err_map[w] = 1.0 - acc
-
-        rng = random.Random(SEED)
-        error_stream = []
-        for r in stream:
-            w = int(r["window"])
-            err_rate = window_err_map.get(w, 0.20)
-            error_stream.append(1 if rng.random() < err_rate else 0)
-        return error_stream
-
-    raise FileNotFoundError(
-        f"Neither {predictions_path} nor {metrics_path} was found. "
-        "Run `python scripts/evaluate_windows.py` first."
-    )
+    # Aggregate accuracy cannot reconstruct the sequence required by ADWIN.
+    from benchmark_common import read_csv, validate_predictions
+    if not predictions_path.exists():
+        raise FileNotFoundError(f"Actual per-message predictions required: {predictions_path}")
+    predictions = read_csv(predictions_path)
+    validate_predictions(predictions, stream, stream=True)
+    return [int(row["prediction"] != row["label"]) for row in predictions]
 
 #Main Pipeline
 

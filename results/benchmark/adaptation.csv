@@ -1,0 +1,7 @@
+method,seed,complete_model_seed,complete_paired_seed,super_sms_f1,super_sms_f1_change_pp,uci_f1_retention_pct
+baseline,29822,True,True,0.7429420505200595,0.0,100.0
+baseline,29823,True,True,0.7845479888490641,0.0,100.0
+baseline,29824,True,True,0.9283582089552239,0.0,100.0
+drift_triggered_lora,29822,True,True,0.9869608826479438,24.401883212788434,341.50579150579154
+drift_triggered_lora,29823,True,True,0.9854636591478697,20.091567029880565,295.62961606543365
+drift_triggered_lora,29824,True,True,0.9837728194726166,5.5414610517392715,144.88006450312437

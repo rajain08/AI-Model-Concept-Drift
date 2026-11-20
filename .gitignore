@@ -8,6 +8,8 @@ data/raw/*
 !data/raw/manifest.json
 data/processed/
 results/*_smoke/
+results/benchmark/
+results/benchmark_runs/
 *predictions.csv
 .DS_Store
 .vscode/
